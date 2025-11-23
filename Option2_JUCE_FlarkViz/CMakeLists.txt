@@ -46,6 +46,7 @@ set(SOURCE_FILES
     Source/Presets/PresetManager.cpp
     Source/Presets/PresetLoader.cpp
     Source/Presets/Milk2Loader.cpp
+    Source/Presets/Preset.cpp
     Source/Expression/MilkdropEval.cpp
 )
 
