@@ -36,3 +36,9 @@ JuceLibraryCode/
 # Build artifacts
 *_artefacts/
 *.log
+
+# Test executables
+test_expressions
+test_*
+!test_*.cpp
+!test_*.h
