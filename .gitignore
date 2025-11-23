@@ -1,0 +1,38 @@
+# Build directories
+Option2_JUCE_FlarkViz/build/
+Option2_JUCE_FlarkViz/Builds/
+build/
+Builds/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+!CMakeLists.txt
+
+# Compiled binaries
+*.exe
+*.app
+*.so
+*.dylib
+*.a
+*.lib
+*.o
+*.obj
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# JUCE
+JuceLibraryCode/
+*.jucer.bak
+
+# Build artifacts
+*_artefacts/
+*.log
