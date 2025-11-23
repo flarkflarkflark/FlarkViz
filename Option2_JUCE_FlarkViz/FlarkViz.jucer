@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="FlarkViz" name="FlarkViz" projectType="guiapp" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              companyName="flarkAUDIO" companyCopyright="flarkAUDIO" companyWebsite="https://github.com/flarkflarkflark"
+              companyEmail="" bundleIdentifier="com.flarkaudio.flarkviz" 
+              pluginManufacturerCode="Flrk" pluginCode="Fviz" 
+              cppLanguageStandard="20" headerPath="../../Source">
+  <MAINGROUP id="VJfEGx" name="FlarkViz">
+    <GROUP id="{8B7C3A5D-9E4F-8C8F-B5D4-E3F2A1C8D9E0}" name="Source">
+      <GROUP id="{1A2B3C4D-5E6F-7A8B-9C0D-E1F2A3B4C5D6}" name="Audio">
+        <FILE id="Audio001" name="AudioAnalyzer.h" compile="0" resource="0"
+              file="Source/Audio/AudioAnalyzer.h"/>
+        <FILE id="Audio002" name="AudioAnalyzer.cpp" compile="1" resource="0"
+              file="Source/Audio/AudioAnalyzer.cpp"/>
+        <FILE id="Audio003" name="AudioCapture.h" compile="0" resource="0"
+              file="Source/Audio/AudioCapture.h"/>
+        <FILE id="Audio004" name="AudioCapture.cpp" compile="1" resource="0"
+              file="Source/Audio/AudioCapture.cpp"/>
+      </GROUP>
+      <GROUP id="{2B3C4D5E-6F7A-8B9C-0D1E-F2A3B4C5D6E7}" name="Rendering">
+        <FILE id="Render001" name="PresetRenderer.h" compile="0" resource="0"
+              file="Source/Rendering/PresetRenderer.h"/>
+        <FILE id="Render002" name="PresetRenderer.cpp" compile="1" resource="0"
+              file="Source/Rendering/PresetRenderer.cpp"/>
+        <FILE id="Render003" name="ShaderCompiler.h" compile="0" resource="0"
+              file="Source/Rendering/ShaderCompiler.h"/>
+        <FILE id="Render004" name="ShaderCompiler.cpp" compile="1" resource="0"
+              file="Source/Rendering/ShaderCompiler.cpp"/>
+        <FILE id="Render005" name="TransitionEngine.h" compile="0" resource="0"
+              file="Source/Rendering/TransitionEngine.h"/>
+        <FILE id="Render006" name="TransitionEngine.cpp" compile="1" resource="0"
+              file="Source/Rendering/TransitionEngine.cpp"/>
+      </GROUP>
+      <GROUP id="{3C4D5E6F-7A8B-9C0D-1E2F-A3B4C5D6E7F8}" name="Presets">
+        <FILE id="Preset001" name="PresetLoader.h" compile="0" resource="0"
+              file="Source/Presets/PresetLoader.h"/>
+        <FILE id="Preset002" name="PresetLoader.cpp" compile="1" resource="0"
+              file="Source/Presets/PresetLoader.cpp"/>
+        <FILE id="Preset003" name="Milk2Loader.h" compile="0" resource="0"
+              file="Source/Presets/Milk2Loader.h"/>
+        <FILE id="Preset004" name="Milk2Loader.cpp" compile="1" resource="0"
+              file="Source/Presets/Milk2Loader.cpp"/>
+        <FILE id="Preset005" name="PresetManager.h" compile="0" resource="0"
+              file="Source/Presets/PresetManager.h"/>
+        <FILE id="Preset006" name="PresetManager.cpp" compile="1" resource="0"
+              file="Source/Presets/PresetManager.cpp"/>
+      </GROUP>
+      <GROUP id="{4D5E6F7A-8B9C-0D1E-2F3A-B4C5D6E7F8A9}" name="Expression">
+        <FILE id="Expr001" name="MilkdropEval.h" compile="0" resource="0"
+              file="Source/Expression/MilkdropEval.h"/>
+        <FILE id="Expr002" name="MilkdropEval.cpp" compile="1" resource="0"
+              file="Source/Expression/MilkdropEval.cpp"/>
+      </GROUP>
+      <FILE id="Main001" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="Main002" name="MainComponent.h" compile="0" resource="0"
+            file="Source/MainComponent.h"/>
+      <FILE id="Main003" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="FlarkViz"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="FlarkViz" optimisation="3"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="~/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="~/JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+</JUCERPROJECT>
