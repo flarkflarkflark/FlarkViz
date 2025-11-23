@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../Audio/AudioAnalyzer.h"
 
 /**
  * @class PresetRenderer
@@ -25,7 +26,7 @@ public:
     void beginFrame();
     void renderPreset (const std::vector<float>& fftData,
                       const std::vector<float>& waveformData,
-                      const struct AudioAnalyzer::Beat& beat);
+                      const AudioAnalyzer::Beat& beat);
     void endFrame();
     
     //==========================================================================

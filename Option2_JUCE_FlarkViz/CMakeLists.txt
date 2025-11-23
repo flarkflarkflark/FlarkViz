@@ -58,6 +58,8 @@ juce_add_gui_app(FlarkViz
 
 target_sources(FlarkViz PRIVATE ${SOURCE_FILES})
 
+target_include_directories(FlarkViz PRIVATE Source)
+
 target_compile_definitions(FlarkViz
     PRIVATE
         JUCE_WEB_BROWSER=0

@@ -106,7 +106,11 @@ bool MainComponent::keyPressed (const juce::KeyPress& key)
     if (key.getKeyCode() == juce::KeyPress::F7Key)
     {
         isFullscreen = !isFullscreen;
-        setFullScreen (isFullscreen);
+        if (auto* window = getTopLevelComponent())
+        {
+            if (auto* docWindow = dynamic_cast<juce::DocumentWindow*>(window))
+                docWindow->setFullScreen(isFullscreen);
+        }
         return true;
     }
     
