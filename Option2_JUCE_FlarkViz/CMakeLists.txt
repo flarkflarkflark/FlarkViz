@@ -42,6 +42,7 @@ set(SOURCE_FILES
     Source/Audio/AudioCapture.cpp
     Source/Rendering/PresetRenderer.cpp
     Source/Rendering/ShaderCompiler.cpp
+    Source/Rendering/RenderState.cpp
     Source/Rendering/TransitionEngine.cpp
     Source/Presets/PresetManager.cpp
     Source/Presets/PresetLoader.cpp
