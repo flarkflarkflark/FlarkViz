@@ -94,7 +94,7 @@ void FlarkVizPluginEditor::paint(juce::Graphics& g)
         juce::String info;
         info << "Bass: " << juce::String(analyzer->getBass(), 2) << "  ";
         info << "Mid: " << juce::String(analyzer->getMid(), 2) << "  ";
-        info << "Treble: " << juce::String(analyzer->getTreble(), 2);
+        info << "Treble: " << juce::String(analyzer->getTreb(), 2);
 
         g.drawText(info, vizArea.removeFromBottom(30), juce::Justification::centred);
     }

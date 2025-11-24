@@ -42,3 +42,6 @@ test_expressions
 test_*
 !test_*.cpp
 !test_*.h
+/JUCE/
+/build-plugin/
+build-plugin/

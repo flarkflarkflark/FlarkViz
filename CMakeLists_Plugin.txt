@@ -77,6 +77,11 @@ target_sources(FlarkVizPlugin PRIVATE
     Source/Rendering/RenderState.h
 )
 
+# Include directories
+target_include_directories(FlarkVizPlugin PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source
+)
+
 # Compiler definitions
 target_compile_definitions(FlarkVizPlugin PUBLIC
     JUCE_WEB_BROWSER=0
@@ -96,6 +101,7 @@ target_link_libraries(FlarkVizPlugin PRIVATE
     juce::juce_audio_utils
     juce::juce_core
     juce::juce_data_structures
+    juce::juce_dsp
     juce::juce_events
     juce::juce_graphics
     juce::juce_gui_basics
