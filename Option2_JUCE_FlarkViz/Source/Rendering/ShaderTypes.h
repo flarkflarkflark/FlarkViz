@@ -61,11 +61,18 @@ struct CompiledShader
     int loc_sx = -1;
     int loc_sy = -1;
 
+    // Wave colors
+    int loc_wave_r = -1;
+    int loc_wave_g = -1;
+    int loc_wave_b = -1;
+    int loc_wave_a = -1;
+
     // Resolution
     int loc_resolution = -1;
 
     // Textures
     int loc_texture = -1;
+    int loc_mainTexture = -1;
 
     // Custom q variables (q1-q32)
     int loc_q[32];

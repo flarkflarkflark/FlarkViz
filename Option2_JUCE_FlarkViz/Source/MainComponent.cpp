@@ -60,17 +60,23 @@ void MainComponent::newOpenGLContextCreated()
 void MainComponent::renderOpenGL()
 {
     using namespace juce::gl;
-    
-    // Get audio data
-    auto fftData = audioAnalyzer->getFFTData();
-    auto waveformData = audioAnalyzer->getWaveformData();
-    auto beat = audioAnalyzer->detectBeat();
-    
+
+    // Get audio levels from analyzer
+    float bass = audioAnalyzer->getBass();
+    float mid = audioAnalyzer->getMid();
+    float treb = audioAnalyzer->getTreb();
+    float bassAtt = audioAnalyzer->getBassAtt();
+    float midAtt = audioAnalyzer->getMidAtt();
+    float trebAtt = audioAnalyzer->getTrebAtt();
+
+    // Calculate delta time (assuming 60fps)
+    float deltaTime = 1.0f / 60.0f;
+
     // Render current preset
     if (renderer != nullptr)
     {
-        renderer->beginFrame();
-        renderer->renderPreset (fftData, waveformData, beat);
+        renderer->beginFrame(deltaTime);
+        renderer->renderPreset(bass, mid, treb, bassAtt, midAtt, trebAtt);
         renderer->endFrame();
     }
 }
@@ -138,7 +144,7 @@ bool MainComponent::keyPressed (const juce::KeyPress& key)
     // 'c': Randomize colors
     if (key.getTextCharacter() == 'c')
     {
-        renderer->randomizeColors();
+        // TODO: Implement color randomization
         return true;
     }
     
@@ -176,8 +182,31 @@ void MainComponent::setupAudioInput()
 
 void MainComponent::loadDefaultPreset()
 {
-    // Load a default preset
-    auto defaultPreset = presetManager->getPreset (0);
-    if (defaultPreset != nullptr && renderer != nullptr)
-        renderer->loadPreset (defaultPreset);
+    if (!renderer)
+        return;
+
+    // Create a simple default preset for testing
+    MilkDropPreset preset;
+    preset.name = "FlarkViz Default";
+    preset.author = "flarkAUDIO";
+
+    // Simple per-frame code
+    preset.perFrameCode = R"(
+        zoom = 1.0 + 0.1 * sin(time + bass);
+        rot = rot + 0.02 * cos(time * 0.5);
+        wave_r = 0.5 + 0.5 * sin(time);
+        wave_g = 0.5 + 0.5 * cos(time);
+        wave_b = 0.5 + 0.5 * sin(time * 1.5);
+    )";
+
+    // Simple warp shader
+    preset.warpShaderCode = R"(
+        float2 offset = float2(0.01, 0.01) * saturate(bass);
+        uv_warped += offset * frac(time);
+    )";
+
+    preset.fDecay = 0.98f;
+
+    renderer->loadPreset(preset);
+    DBG("FlarkViz: Default preset loaded");
 }

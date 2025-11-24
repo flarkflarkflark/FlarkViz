@@ -179,6 +179,7 @@ public:
     // Time variables
     double time = 0.0;
     double frame = 0.0;
+    double fps = 60.0;
 
     // State variables (per-frame)
     double zoom = 1.0;
@@ -223,6 +224,7 @@ public:
         if (name == "treb_att") return treb_att;
         if (name == "time") return time;
         if (name == "frame") return frame;
+        if (name == "fps") return fps;
         if (name == "zoom") return zoom;
         if (name == "rot") return rot;
         if (name == "cx") return cx;
@@ -268,6 +270,7 @@ public:
         if (name == "treb_att") { treb_att = value; return; }
         if (name == "time") { time = value; return; }
         if (name == "frame") { frame = value; return; }
+        if (name == "fps") { fps = value; return; }
         if (name == "zoom") { zoom = value; return; }
         if (name == "rot") { rot = value; return; }
         if (name == "cx") { cx = value; return; }

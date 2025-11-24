@@ -1,17 +1,10 @@
 #include "ShaderCompiler.h"
+#include <JuceHeader.h>
 #include <algorithm>
 #include <regex>
 #include <sstream>
 
-// OpenGL will be provided by JUCE's OpenGL module when built with the full project
-// For now, we'll define the necessary constants
-#ifndef GL_VERTEX_SHADER
-#define GL_VERTEX_SHADER 0x8B31
-#define GL_FRAGMENT_SHADER 0x8B30
-#define GL_COMPILE_STATUS 0x8B81
-#define GL_LINK_STATUS 0x8B82
-#define GL_INFO_LOG_LENGTH 0x8B84
-#endif
+using namespace juce::gl;
 
 ShaderCompiler::ShaderCompiler()
 {
@@ -184,63 +177,170 @@ std::unique_ptr<MilkDrop::CompiledShader> ShaderCompiler::compileShader(
     const std::string& vertexSource,
     const std::string& fragmentSource)
 {
-    // NOTE: This function requires OpenGL context to be active
-    // When built with JUCE, OpenGL functions will be available
-    // For standalone compilation, this will be a no-op
-
     auto shader = std::make_unique<MilkDrop::CompiledShader>();
 
-    // In a full implementation with OpenGL:
-    // 1. Compile vertex shader
-    // 2. Compile fragment shader
-    // 3. Link program
-    // 4. Extract uniform locations
+    // Compile vertex shader
+    unsigned int vertexShader = compileShaderStage(vertexSource.c_str(), GL_VERTEX_SHADER);
+    if (vertexShader == 0)
+    {
+        lastError = "Failed to compile vertex shader: " + getShaderInfoLog(0);
+        return nullptr;
+    }
 
-    // For now, return a placeholder
-    // This will be fully implemented when integrated with JUCE OpenGL
+    // Compile fragment shader
+    unsigned int fragmentShader = compileShaderStage(fragmentSource.c_str(), GL_FRAGMENT_SHADER);
+    if (fragmentShader == 0)
+    {
+        glDeleteShader(vertexShader);
+        lastError = "Failed to compile fragment shader: " + getShaderInfoLog(0);
+        return nullptr;
+    }
 
-    lastError = "Shader compilation requires OpenGL context (provided by JUCE)";
+    // Link program
+    unsigned int programId = linkShaderProgram(vertexShader, fragmentShader);
+    if (programId == 0)
+    {
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+        lastError = "Failed to link shader program: " + getProgramInfoLog(0);
+        return nullptr;
+    }
 
+    // Clean up shader objects (no longer needed after linking)
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    // Store program ID
+    shader->programId = programId;
+
+    // Extract all uniform locations
+    extractUniformLocations(programId, *shader);
+
+    lastError.clear();
     return shader;
 }
 
 unsigned int ShaderCompiler::compileShaderStage(const char* source, unsigned int type)
 {
-    // OpenGL shader compilation
-    // This will be implemented when built with JUCE OpenGL module
-    return 0;
+    unsigned int shader = glCreateShader(type);
+    if (shader == 0)
+        return 0;
+
+    glShaderSource(shader, 1, &source, nullptr);
+    glCompileShader(shader);
+
+    // Check for compilation errors
+    GLint success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success)
+    {
+        lastError = getShaderInfoLog(shader);
+        glDeleteShader(shader);
+        return 0;
+    }
+
+    return shader;
 }
 
 unsigned int ShaderCompiler::linkShaderProgram(unsigned int vertexShader,
                                                unsigned int fragmentShader)
 {
-    // OpenGL program linking
-    // This will be implemented when built with JUCE OpenGL module
-    return 0;
+    unsigned int program = glCreateProgram();
+    if (program == 0)
+        return 0;
+
+    glAttachShader(program, vertexShader);
+    glAttachShader(program, fragmentShader);
+    glLinkProgram(program);
+
+    // Check for linking errors
+    GLint success;
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        lastError = getProgramInfoLog(program);
+        glDeleteProgram(program);
+        return 0;
+    }
+
+    return program;
 }
 
 void ShaderCompiler::extractUniformLocations(unsigned int programId,
                                              MilkDrop::CompiledShader& shader)
 {
-    // Extract all uniform locations using glGetUniformLocation
-    // This will be implemented when built with JUCE OpenGL module
+    // Time variables
+    shader.loc_time = glGetUniformLocation(programId, "time");
+    shader.loc_frame = glGetUniformLocation(programId, "frame");
+    shader.loc_fps = glGetUniformLocation(programId, "fps");
 
-    // Example:
-    // shader.loc_time = glGetUniformLocation(programId, "time");
-    // shader.loc_bass = glGetUniformLocation(programId, "bass");
-    // etc.
+    // Audio variables
+    shader.loc_bass = glGetUniformLocation(programId, "bass");
+    shader.loc_mid = glGetUniformLocation(programId, "mid");
+    shader.loc_treb = glGetUniformLocation(programId, "treb");
+    shader.loc_bass_att = glGetUniformLocation(programId, "bass_att");
+    shader.loc_mid_att = glGetUniformLocation(programId, "mid_att");
+    shader.loc_treb_att = glGetUniformLocation(programId, "treb_att");
+
+    // Preset state
+    shader.loc_zoom = glGetUniformLocation(programId, "zoom");
+    shader.loc_rot = glGetUniformLocation(programId, "rot");
+    shader.loc_cx = glGetUniformLocation(programId, "cx");
+    shader.loc_cy = glGetUniformLocation(programId, "cy");
+    shader.loc_dx = glGetUniformLocation(programId, "dx");
+    shader.loc_dy = glGetUniformLocation(programId, "dy");
+    shader.loc_warp = glGetUniformLocation(programId, "warp");
+    shader.loc_sx = glGetUniformLocation(programId, "sx");
+    shader.loc_sy = glGetUniformLocation(programId, "sy");
+
+    // Wave colors
+    shader.loc_wave_r = glGetUniformLocation(programId, "wave_r");
+    shader.loc_wave_g = glGetUniformLocation(programId, "wave_g");
+    shader.loc_wave_b = glGetUniformLocation(programId, "wave_b");
+    shader.loc_wave_a = glGetUniformLocation(programId, "wave_a");
+
+    // Resolution
+    shader.loc_resolution = glGetUniformLocation(programId, "resolution");
+
+    // Texture sampler
+    shader.loc_mainTexture = glGetUniformLocation(programId, "mainTexture");
+
+    // Custom variables (q1-q32)
+    for (int i = 0; i < 32; ++i)
+    {
+        std::string qName = "q" + std::to_string(i + 1);
+        shader.loc_q[i] = glGetUniformLocation(programId, qName.c_str());
+    }
 }
 
 std::string ShaderCompiler::getShaderInfoLog(unsigned int shaderId)
 {
-    // Get shader compilation log
-    // This will be implemented when built with JUCE OpenGL module
-    return "";
+    if (shaderId == 0)
+        return "Invalid shader ID";
+
+    GLint logLength;
+    glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
+
+    if (logLength <= 0)
+        return "";
+
+    std::string log(logLength, '\0');
+    glGetShaderInfoLog(shaderId, logLength, nullptr, &log[0]);
+    return log;
 }
 
 std::string ShaderCompiler::getProgramInfoLog(unsigned int programId)
 {
-    // Get program linking log
-    // This will be implemented when built with JUCE OpenGL module
-    return "";
+    if (programId == 0)
+        return "Invalid program ID";
+
+    GLint logLength;
+    glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &logLength);
+
+    if (logLength <= 0)
+        return "";
+
+    std::string log(logLength, '\0');
+    glGetProgramInfoLog(programId, logLength, nullptr, &log[0]);
+    return log;
 }

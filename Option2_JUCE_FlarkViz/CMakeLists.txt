@@ -43,6 +43,7 @@ set(SOURCE_FILES
     Source/Rendering/PresetRenderer.cpp
     Source/Rendering/ShaderCompiler.cpp
     Source/Rendering/RenderState.cpp
+    Source/Rendering/FramebufferManager.cpp
     Source/Rendering/TransitionEngine.cpp
     Source/Presets/PresetManager.cpp
     Source/Presets/PresetLoader.cpp
