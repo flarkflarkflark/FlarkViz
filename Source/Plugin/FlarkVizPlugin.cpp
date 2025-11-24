@@ -94,7 +94,8 @@ void FlarkVizPlugin::changeProgramName(int index, const juce::String& newName)
 
 void FlarkVizPlugin::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    audioAnalyzer.initialize(sampleRate, samplesPerBlock);
+    // Audio analyzer doesn't need initialization
+    juce::ignoreUnused(sampleRate, samplesPerBlock);
 }
 
 void FlarkVizPlugin::releaseResources()
@@ -120,7 +121,9 @@ void FlarkVizPlugin::processBlock(juce::AudioBuffer<float>& buffer,
     juce::ScopedNoDenormals noDenormals;
 
     // Analyze audio
-    audioAnalyzer.processBlock(buffer);
+    audioAnalyzer.processAudioBlock(const_cast<const float**>(buffer.getArrayOfReadPointers()),
+                                    buffer.getNumChannels(),
+                                    buffer.getNumSamples());
 
     // Pass through audio unchanged
     // (This is a visualization plugin, not an audio effect)
