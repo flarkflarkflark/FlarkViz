@@ -1,0 +1,116 @@
+# FlarkViz Plugin CMake Configuration
+# Builds VST3, LV2, and CLAP audio plugins
+
+cmake_minimum_required(VERSION 3.15)
+
+project(FlarkVizPlugin VERSION 1.0.0)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Add JUCE
+add_subdirectory(JUCE)
+
+# Define plugin formats to build
+# VST3: Industry standard plugin format
+# LV2: Open source plugin format (Linux)
+# CLAP: New open plugin format
+set(PLUGIN_FORMATS VST3 LV2 CLAP Standalone)
+
+# Create plugin target
+juce_add_plugin(FlarkVizPlugin
+    COMPANY_NAME "FlarkViz"
+    PLUGIN_MANUFACTURER_CODE Flrk
+    PLUGIN_CODE Fviz
+    FORMATS ${PLUGIN_FORMATS}
+    PRODUCT_NAME "FlarkViz"
+
+    # Plugin characteristics
+    IS_SYNTH FALSE
+    NEEDS_MIDI_INPUT FALSE
+    NEEDS_MIDI_OUTPUT FALSE
+    IS_MIDI_EFFECT FALSE
+    EDITOR_WANTS_KEYBOARD_FOCUS TRUE
+
+    # Copy plugin to system folder after build
+    COPY_PLUGIN_AFTER_BUILD TRUE
+
+    # VST3 specific
+    VST3_CATEGORIES "Fx" "Analyzer"
+
+    # LV2 specific
+    LV2URI "http://flarkviz.org/plugins/flarkviz"
+
+    # CLAP specific
+    CLAP_ID "org.flarkviz.flarkviz"
+)
+
+# Source files
+target_sources(FlarkVizPlugin PRIVATE
+    Source/Plugin/FlarkVizPlugin.cpp
+    Source/Plugin/FlarkVizPlugin.h
+    Source/Plugin/FlarkVizPluginEditor.cpp
+    Source/Plugin/FlarkVizPluginEditor.h
+
+    # Core engine sources
+    Source/Audio/AudioAnalyzer.cpp
+    Source/Audio/AudioAnalyzer.h
+    Source/Expression/MilkdropEval.cpp
+    Source/Expression/MilkdropEval.h
+    Source/Expression/ExpressionTypes.h
+    Source/Presets/Preset.cpp
+    Source/Presets/Preset.h
+    Source/Presets/PresetManager.cpp
+    Source/Presets/PresetManager.h
+    Source/Presets/Milk2Loader.cpp
+    Source/Presets/Milk2Loader.h
+    Source/Rendering/PresetRenderer.cpp
+    Source/Rendering/PresetRenderer.h
+    Source/Rendering/ShaderCompiler.cpp
+    Source/Rendering/ShaderCompiler.h
+    Source/Rendering/TransitionEngine.cpp
+    Source/Rendering/TransitionEngine.h
+    Source/Rendering/FramebufferManager.cpp
+    Source/Rendering/FramebufferManager.h
+    Source/Rendering/RenderState.cpp
+    Source/Rendering/RenderState.h
+)
+
+# Compiler definitions
+target_compile_definitions(FlarkVizPlugin PUBLIC
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
+    JUCE_VST3_CAN_REPLACE_VST2=0
+    JUCE_DISPLAY_SPLASH_SCREEN=0
+    JUCE_REPORT_APP_USAGE=0
+)
+
+# Link libraries
+target_link_libraries(FlarkVizPlugin PRIVATE
+    juce::juce_audio_basics
+    juce::juce_audio_devices
+    juce::juce_audio_formats
+    juce::juce_audio_plugin_client
+    juce::juce_audio_processors
+    juce::juce_audio_utils
+    juce::juce_core
+    juce::juce_data_structures
+    juce::juce_events
+    juce::juce_graphics
+    juce::juce_gui_basics
+    juce::juce_gui_extra
+    juce::juce_opengl
+)
+
+# Install targets
+install(TARGETS FlarkVizPlugin
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+)
+
+# Print build information
+message(STATUS "FlarkViz Plugin Configuration:")
+message(STATUS "  Version: ${PROJECT_VERSION}")
+message(STATUS "  Plugin Formats: ${PLUGIN_FORMATS}")
+message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
