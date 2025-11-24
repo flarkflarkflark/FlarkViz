@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=FlarkViz
+Comment=MilkDrop-compatible music visualization engine
+Exec=FlarkViz
+Icon=flarkviz
+Categories=AudioVideo;Audio;Visualization;
+Terminal=false
+StartupNotify=true

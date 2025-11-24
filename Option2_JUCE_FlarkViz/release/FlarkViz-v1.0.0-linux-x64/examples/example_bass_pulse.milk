@@ -1,0 +1,91 @@
+[preset00]
+name=Bass Pulse Zoom
+author=flarkAUDIO
+fDecay=0.950000
+fVideoEchoZoom=1.006596
+fVideoEchoAlpha=0.000000
+nVideoEchoOrientation=0
+nWaveMode=0
+bAdditiveWaves=0
+bWaveDots=0
+bWaveThick=0
+bModWaveAlphaByVolume=0
+bMaximizeWaveColor=1
+bTexWrap=1
+bDarkenCenter=0
+bRedBlueStereo=0
+bBrighten=0
+bDarken=0
+bSolarize=0
+bInvert=0
+fWaveAlpha=0.800000
+fWaveScale=1.000000
+fWaveSmoothing=0.750000
+fWaveParam=0.000000
+fModWaveAlphaStart=0.750000
+fModWaveAlphaEnd=0.950000
+fWarpAnimSpeed=1.000000
+fWarpScale=1.000000
+fZoomExponent=1.000000
+fShader=0.000000
+zoom=1.000000
+rot=0.000000
+cx=0.500000
+cy=0.500000
+dx=0.000000
+dy=0.000000
+warp=1.000000
+sx=1.000000
+sy=1.000000
+wave_r=0.500000
+wave_g=0.500000
+wave_b=0.500000
+wave_x=0.500000
+wave_y=0.500000
+
+[per_frame_1]
+// Bass-reactive zoom with smooth decay
+zoom = zoom + bass * 0.15;
+zoom = zoom * 0.95 + 1.0 * 0.05;
+
+// Slow rotation
+rot = rot + 0.01 * sin(time * 0.3);
+
+// Color cycling based on audio
+wave_r = 0.5 + 0.5 * sin(time * 0.7 + bass * 2);
+wave_g = 0.5 + 0.5 * sin(time * 0.9 + mid * 2);
+wave_b = 0.5 + 0.5 * sin(time * 1.1 + treb * 2);
+
+// Custom variable for warp
+q1 = bass;
+q2 = mid;
+q3 = treb;
+
+[per_frame_2]
+// Center offset with mid frequencies
+dx = 0.01 * sin(time + mid);
+dy = 0.01 * cos(time + mid);
+
+[warp_1]
+// Bass-reactive radial warp
+float2 center = float2(0.5, 0.5);
+float2 delta = uv - center;
+float dist = length(delta);
+float angle = atan(delta.y, delta.x);
+
+// Warp amount based on bass
+float warpAmount = saturate(bass) * 0.05;
+float radialWarp = sin(dist * 10.0 + time) * warpAmount;
+
+uv_warped = center + delta * (1.0 + radialWarp);
+
+[comp_1]
+// Composite shader - color enhancement
+float3 col = texture(mainTexture, uv).rgb;
+
+// Enhance colors based on audio
+col.r *= 1.0 + bass_att * 0.3;
+col.g *= 1.0 + mid_att * 0.3;
+col.b *= 1.0 + treb_att * 0.3;
+
+ret = float4(col, 1.0);
