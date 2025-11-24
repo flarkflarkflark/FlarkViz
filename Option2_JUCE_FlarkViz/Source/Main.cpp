@@ -1,4 +1,5 @@
 #include <JuceHeader.h>
+#include "ProjectInfo.h"
 #include "MainComponent.h"
 
 /**

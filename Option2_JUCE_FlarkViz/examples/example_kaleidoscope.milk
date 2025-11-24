@@ -1,0 +1,48 @@
+[preset00]
+name=Audio Kaleidoscope
+author=flarkAUDIO
+fDecay=0.960000
+zoom=1.000000
+rot=0.000000
+cx=0.500000
+cy=0.500000
+
+[per_frame_1]
+// Oscillating zoom
+zoom = 1.0 + 0.2 * sin(time * 0.5 + bass);
+
+// Counter-rotating layers
+rot = time * 0.3 + bass_att;
+
+// Audio-reactive colors
+wave_r = abs(sin(time + bass * 3));
+wave_g = abs(sin(time * 1.5 + mid * 3));
+wave_b = abs(sin(time * 2.0 + treb * 3));
+
+// Store rotation for shader
+q1 = rot;
+q2 = time;
+q3 = bass + mid + treb;
+
+[warp_1]
+// Kaleidoscope effect - mirror and rotate
+float2 center = float2(0.5, 0.5);
+float2 delta = uv - center;
+float dist = length(delta);
+float angle = atan(delta.y, delta.x);
+
+// Number of kaleidoscope segments (based on bass)
+float segments = 6.0 + floor(bass * 6.0);
+float segmentAngle = 6.28318 / segments;
+
+// Mirror within each segment
+float localAngle = frac(angle / segmentAngle) * segmentAngle;
+float mirror = abs(frac(localAngle / segmentAngle) - 0.5) * 2.0;
+localAngle = mirror * segmentAngle;
+
+// Reconstruct UV
+float2 kaleidoUV;
+kaleidoUV.x = center.x + cos(localAngle) * dist;
+kaleidoUV.y = center.y + sin(localAngle) * dist;
+
+uv_warped = kaleidoUV;

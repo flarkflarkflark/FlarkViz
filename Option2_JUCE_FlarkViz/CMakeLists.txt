@@ -42,10 +42,13 @@ set(SOURCE_FILES
     Source/Audio/AudioCapture.cpp
     Source/Rendering/PresetRenderer.cpp
     Source/Rendering/ShaderCompiler.cpp
+    Source/Rendering/RenderState.cpp
+    Source/Rendering/FramebufferManager.cpp
     Source/Rendering/TransitionEngine.cpp
     Source/Presets/PresetManager.cpp
     Source/Presets/PresetLoader.cpp
     Source/Presets/Milk2Loader.cpp
+    Source/Presets/Preset.cpp
     Source/Expression/MilkdropEval.cpp
 )
 
@@ -57,6 +60,8 @@ juce_add_gui_app(FlarkViz
 )
 
 target_sources(FlarkViz PRIVATE ${SOURCE_FILES})
+
+target_include_directories(FlarkViz PRIVATE Source)
 
 target_compile_definitions(FlarkViz
     PRIVATE
